@@ -20,8 +20,8 @@ jobs:
         with:
           token: ${{ secrets.PAT }}
           commit-message: Update report
-          committer: degiple <k.takeshima@degiple.com>
-          author: degiple <k.takeshima@degiple.com>
+          committer: GitHub <noreply@github.com>
+          author: ${{ github.actor }} <${{ github.actor }}@users.noreply.github.com>
           signoff: false
           branch: staging
           delete-branch: true
