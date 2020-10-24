@@ -20,8 +20,8 @@ jobs:
         with:
           token: ${{ secrets.PAT }}
           commit-message: Update report
-          committer: K.takehsima <k.takeshima@degiple.com>
-          author: K.takehsima <k.takeshima@degiple.com>
+          committer: degiple
+          author: degiple
           signoff: false
           branch: staging
           delete-branch: true
