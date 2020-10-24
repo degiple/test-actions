@@ -21,7 +21,7 @@ jobs:
           token: ${{ secrets.PAT }}
           commit-message: Update report
           committer: GitHub <noreply@github.com>
-          author: ${{ github.head_commit.author.username }}
+          author: ${{ github.actor }} <${{ github.actor }}@users.noreply.github.com>
           signoff: false
           branch: staging
           delete-branch: true
