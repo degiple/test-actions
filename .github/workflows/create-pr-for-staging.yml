@@ -1,0 +1,42 @@
+name: Create Pull Request (staging <- master)
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  createPullRequest:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Make changes to pull request
+        run: date +%s > report.txt
+
+      - name: Create Pull Request
+        id: 
+        uses: peter-evans/create-pull-request@v3
+        with:
+          token: ${{ secrets.PAT }}
+          commit-message: Update report
+          committer: GitHub <noreply@github.com>
+          author: ${{ github.head_commit.author.username }}
+          signoff: false
+          branch: staging
+          delete-branch: true
+          title: 'Automatic create-pull-request from actions'
+          body: master から staging ブランチへのプルリクエスト
+          labels: automated pr
+          # assignees: 
+          # reviewers: 
+          team-reviewers: |
+            owners
+            maintainers
+          # milestone: 1
+          draft: false
+
+      - name: Check outputs
+        run: |
+          echo "Pull Request Number - ${{ steps.cpr.outputs.pull-request-number }}"
+          echo "Pull Request URL - ${{ steps.cpr.outputs.pull-request-url }}"
