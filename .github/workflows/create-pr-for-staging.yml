@@ -11,16 +11,13 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
-      - name: Create commits
-        run: |
-          git config user.name 'degiple'
-          git config user.email 'k.takeshima@degiple.com'
-          date +%s > report.txt
-          git add -A
-          git commit -m "Add untracked file during workflow"
-
-#       - name: Make changes to pull request
-#         run: date +%s > report.txt
+#       - name: Create commits
+#         run: |
+#           git config user.name 'degiple'
+#           git config user.email 'k.takeshima@degiple.com'
+#           date +%s > report.txt
+#           git add -A
+#           git commit -m "Add untracked file during workflow"
 
       - name: Create Pull Request
         id: cpr
@@ -39,7 +36,7 @@ jobs:
 # #           milestone: 1
 #           draft: false
 
-#       - name: Check outputs
-#         run: |
-#           echo "Pull Request Number - ${{ steps.cpr.outputs.pull-request-number }}"
-#           echo "Pull Request URL - ${{ steps.cpr.outputs.pull-request-url }}"
+      - name: Check outputs
+        run: |
+          echo "Pull Request Number - ${{ steps.cpr.outputs.pull-request-number }}"
+          echo "Pull Request URL - ${{ steps.cpr.outputs.pull-request-url }}"
