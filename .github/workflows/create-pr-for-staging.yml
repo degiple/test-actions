@@ -25,21 +25,21 @@ jobs:
       - name: Create Pull Request
         id: cpr
         uses: peter-evans/create-pull-request@v3
-        with:
-          token: ${{ secrets.PAT }}
-          commit-message: Update report
-          committer: GitHub <noreply@github.com>
-          author: ${{ github.actor }} <${{ github.actor }}@users.noreply.github.com>
-          signoff: false
-          branch: staging
-          delete-branch: false
-          title: 'Automatic create-pull-request from actions'
-          body: master から staging ブランチへのプルリクエスト
-          labels: automated pr
-#           milestone: 1
-          draft: false
+#         with:
+#           token: ${{ secrets.PAT }}
+#           commit-message: Update report
+#           committer: GitHub <noreply@github.com>
+#           author: ${{ github.actor }} <${{ github.actor }}@users.noreply.github.com>
+#           signoff: false
+#           branch: staging
+#           delete-branch: false
+#           title: 'Automatic create-pull-request from actions'
+#           body: master から staging ブランチへのプルリクエスト
+#           labels: automated pr
+# #           milestone: 1
+#           draft: false
 
-      - name: Check outputs
-        run: |
-          echo "Pull Request Number - ${{ steps.cpr.outputs.pull-request-number }}"
-          echo "Pull Request URL - ${{ steps.cpr.outputs.pull-request-url }}"
+#       - name: Check outputs
+#         run: |
+#           echo "Pull Request Number - ${{ steps.cpr.outputs.pull-request-number }}"
+#           echo "Pull Request URL - ${{ steps.cpr.outputs.pull-request-url }}"
