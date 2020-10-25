@@ -13,7 +13,7 @@ jobs:
 
       - name: Create commits
         run: |
-          git config user.name 'k takeshima'
+          git config user.name 'degiple'
           git config user.email 'k.takeshima@degiple.com'
           date +%s > report.txt
           git add -A
