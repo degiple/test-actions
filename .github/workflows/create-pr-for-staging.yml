@@ -11,30 +11,32 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
-#       - name: Create commits
-#         run: |
-#           git config user.name 'degiple'
-#           git config user.email 'k.takeshima@degiple.com'
-#           date +%s > report.txt
-#           git add -A
-#           git commit -m "Add untracked file during workflow"
+      # 今後、Staging以降にcommitを追加したい時に使う
+      # (Tagsを付けたい時とか)
+      # - name: Create commits
+      #   run: |
+      #     git config user.name 'xxx'
+      #     git config user.email 'xxx'
+      #     date +%s > report.txt
+      #     git add -A
+      #     git commit -m "Add untracked file during workflow"
 
       - name: Create Pull Request
         id: cpr
         uses: peter-evans/create-pull-request@v3
         with:
-#           token: ${{ secrets.PAT }}
-#           commit-message: Update report
-#           committer: GitHub <noreply@github.com>
-#           author: ${{ github.actor }} <${{ github.actor }}@users.noreply.github.com>
-#           signoff: false
           branch: staging
           delete-branch: false
           title: 'Automatic create-pull-request from actions'
           body: master から staging ブランチへのプルリクエスト
-#           labels: automated pr
-# #           milestone: 1
-#           draft: false
+          # token: ${{ secrets.PAT }}
+          # commit-message: Update report
+          # committer: GitHub <noreply@github.com>
+          # author: ${{ github.actor }} <${{ github.actor }}@users.noreply.github.com>
+          # signoff: false
+          # labels: automated pr
+          # milestone: 1
+          # draft: false
 
       - name: Check outputs
         run: |
