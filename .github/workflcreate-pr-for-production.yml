@@ -1,0 +1,25 @@
+name: Create Pull Request (production <- staging)
+
+on:
+  push:
+    branches:
+      - staging
+
+jobs:
+  createPullRequest:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Install hub
+        uses: geertvdc/setup-hub@v1.0.0
+
+      - name: Create Pull Request
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          BASE_BRANCH: production
+          HEAD_BRANCH: staging
+        run: |
+          hub pull-request -m "Automatic PR ($BASE_BRANCH <- $HEAD_BRANCH)" \
+          --base $BASE_BRANCH --head $HEAD_BRANCH \
+          -l "PR:$BASE_BRANCH<-$HEAD_BRANCH"
