@@ -13,32 +13,21 @@ jobs:
 
       # 今後、Staging以降にcommitを追加したい時に使う
       # (Tagsを付けたい時とか)
-      - name: Create commits
-        run: |
-          git config user.name 'xxx'
-          git config user.email 'xxx'
-          date +%s > report.txt
-          git add -A
-          git commit -m "Add untracked file during workflow"
+      # - name: Create commits
+      #   run: |
+      #     git config user.name 'degiple'
+      #     git config user.email 'k.takeshima@degiple.com'
+      #     date +%s > report.txt
+      #     git add -A
+      #     git commit -m "Add untracked file during workflow"
 
+      # プルリクを作成する
+      - name: Install hub
+        uses: geertvdc/setup-hub@v1.0.0
       - name: Create Pull Request
-        id: cpr
-        uses: peter-evans/create-pull-request@v3
-        with:
-          branch: staging
-          delete-branch: false
-          title: 'Automatic create-pull-request from actions'
-          body: master から staging ブランチへのプルリクエスト
-          # token: ${{ secrets.PAT }}
-          # commit-message: Update report
-          # committer: GitHub <noreply@github.com>
-          # author: ${{ github.actor }} <${{ github.actor }}@users.noreply.github.com>
-          # signoff: false
-          # labels: automated pr
-          # milestone: 1
-          # draft: false
-
-      - name: Check outputs
-        run: |
-          echo "Pull Request Number - ${{ steps.cpr.outputs.pull-request-number }}"
-          echo "Pull Request URL - ${{ steps.cpr.outputs.pull-request-url }}"
+        env:
+          # REVIEWERS: "rito328"
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          BRANCH_NAME: ${{ steps.create_branch.outputs.branch_name }}
+        # run: hub pull-request -m "Github Actions からプルリクを出す" -b master -h $BRANCH_NAME -l "PR:draft" -r "$REVIEWERS"
+        run: hub pull-request -m "Github Actions からプルリクを出す" -b staging -h master -l "PR:draft"
