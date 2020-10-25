@@ -36,8 +36,8 @@ jobs:
           title: 'Automatic create-pull-request from actions'
           body: master から staging ブランチへのプルリクエスト
           labels: automated pr
-          milestone: 1
-          draft: true
+#           milestone: 1
+          draft: false
 
       - name: Check outputs
         run: |
