@@ -11,8 +11,8 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
-      今後、Staging以降にcommitを追加したい時に使う
-      (Tagsを付けたい時とか)
+      # 今後、Staging以降にcommitを追加したい時に使う
+      # (Tagsを付けたい時とか)
       - name: Create commits
         run: |
           git config user.name 'xxx'
