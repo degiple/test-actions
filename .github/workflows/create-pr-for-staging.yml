@@ -11,15 +11,15 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
-      # 今後、Staging以降にcommitを追加したい時に使う
-      # (Tagsを付けたい時とか)
-      # - name: Create commits
-      #   run: |
-      #     git config user.name 'xxx'
-      #     git config user.email 'xxx'
-      #     date +%s > report.txt
-      #     git add -A
-      #     git commit -m "Add untracked file during workflow"
+      今後、Staging以降にcommitを追加したい時に使う
+      (Tagsを付けたい時とか)
+      - name: Create commits
+        run: |
+          git config user.name 'xxx'
+          git config user.email 'xxx'
+          date +%s > report.txt
+          git add -A
+          git commit -m "Add untracked file during workflow"
 
       - name: Create Pull Request
         id: cpr
