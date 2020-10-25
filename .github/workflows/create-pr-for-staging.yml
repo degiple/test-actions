@@ -16,8 +16,6 @@ jobs:
           git config user.name 'k takeshima'
           git config user.email 'k.takeshima@degiple.com'
           date +%s > report.txt
-          git commit -am "Modify tracked file during workflow"
-          date +%s > new-report.txt
           git add -A
           git commit -m "Add untracked file during workflow"
 
