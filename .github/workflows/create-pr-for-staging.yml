@@ -18,21 +18,21 @@ jobs:
         id: cpr
         uses: peter-evans/create-pull-request@v3
         with:
-          token: ${{ secrets.PAT }}
+#           token: ${{ secrets.PAT }}
 #           commit-message: Update report
 #           committer: GitHub <noreply@github.com>
 #           author: ${{ github.actor }} <${{ github.actor }}@users.noreply.github.com>
 #           signoff: false
           branch: staging
-#           delete-branch: true
+          delete-branch: false
           title: 'Automatic create-pull-request from actions'
           body: master から staging ブランチへのプルリクエスト
-#           labels: automated pr
+          labels: automated pr
 #           # assignees: 
 #           # reviewers: 
-          team-reviewers: |
-            owners
-            maintainers
+#           team-reviewers: |
+#             owners
+#             maintainers
 #           # milestone: 1
 #           draft: false
 
