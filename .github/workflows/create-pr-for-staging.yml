@@ -36,11 +36,6 @@ jobs:
           title: 'Automatic create-pull-request from actions'
           body: master から staging ブランチへのプルリクエスト
           labels: automated pr
-          assignees: degiple
-#           reviewers: 
-#           team-reviewers: |
-#             owners
-#             maintainers
           milestone: 1
           draft: true
 
