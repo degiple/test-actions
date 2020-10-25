@@ -11,18 +11,18 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
-#       - name: Make changes to pull request
-#         run: date +%s > report.txt
+      - name: Make changes to pull request
+        run: date +%s > report.txt
 
       - name: Create Pull Request
         id: cpr
         uses: peter-evans/create-pull-request@v3
         with:
-#           token: ${{ secrets.PAT }}
-#           commit-message: Update report
-#           committer: GitHub <noreply@github.com>
-#           author: ${{ github.actor }} <${{ github.actor }}@users.noreply.github.com>
-#           signoff: false
+          token: ${{ secrets.PAT }}
+          commit-message: Update report
+          committer: GitHub <noreply@github.com>
+          author: ${{ github.actor }} <${{ github.actor }}@users.noreply.github.com>
+          signoff: false
           branch: staging
           delete-branch: false
           title: 'Automatic create-pull-request from actions'
@@ -34,7 +34,7 @@ jobs:
 #             owners
 #             maintainers
 #           # milestone: 1
-#           draft: false
+          draft: false
 
       - name: Check outputs
         run: |
