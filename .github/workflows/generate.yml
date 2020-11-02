@@ -28,9 +28,9 @@ jobs:
         run: |
           version=$(echo ${TAG#*v})
           list=(${version//./ })
-          major=$(echo ${list[0]}) && minor=$(echo ${list[1]})
+          major=$(echo ${list[0]}) && minor=$(echo ${list[1]}) && patch=0
           next_minor=$((minor+1))
-          echo ::set-output name=tag::$(echo "v${major}.${next_minor}")
+          echo ::set-output name=tag::$(echo "v${major}.${next_minor}.${patch}")
       - name: "Push next tag"
         env:
           NEXT_TAG: ${{ steps.next.outputs.tag }}
