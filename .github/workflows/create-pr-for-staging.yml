@@ -14,15 +14,24 @@ jobs:
       - name: Install hub
         uses: geertvdc/setup-hub@v1.0.0
 
+      - name: Create tmp Branch
+        id: create_branch
+        env:
+          TZ: 'Asia/Tokyo'
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          DATE=`date "+%y%m%d-%H%M%S"`
+          BRANCH_NAME="master-v$DATE"
+          git checkout -b "$BRANCH_NAME"
+          git push origin "$BRANCH_NAME"
+          echo ::set-output name=branch_name::$BRANCH_NAME
+
       - name: Create Pull Request
         env:
-          GITHUB_USER: ${{ secrets.GITHUB_USER }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           BASE_BRANCH: staging
-          HEAD_BRANCH: master
-          COMMIT_ID: ${{ github.sha }}
+          HEAD_BRANCH: ${{ steps.create_branch.outputs.branch_name }}
         run: |
-          echo $GITHUB_USER
-          hub pull-request -m "Automatic PR ($BASE_BRANCH <- $HEAD_BRANCH) #${COMMIT_ID:0:7}" \
+          hub pull-request -m "Automatic PR ($BASE_BRANCH <- $HEAD_BRANCH)" \
           --base $BASE_BRANCH --head $HEAD_BRANCH \
-          -l "PR:$BASE_BRANCH<-$HEAD_BRANCH"
+          -l "PR:$BASE_BRANCH<-master"
