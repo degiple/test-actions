@@ -20,8 +20,8 @@ jobs:
           TZ: 'Asia/Tokyo'
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          DATE=`date +"%Y%m%d"`
-          BRANCH_NAME="staging_$DATE"
+          DATE=`date "+%y%m%d-%H%M%S"`
+          BRANCH_NAME="master:v$DATE"
           git checkout -b "$BRANCH_NAME"
           git push origin "$BRANCH_NAME"
           echo ::set-output name=branch_name::$BRANCH_NAME
@@ -34,4 +34,4 @@ jobs:
         run: |
           hub pull-request -m "Automatic PR ($BASE_BRANCH <- $HEAD_BRANCH)" \
           --base $BASE_BRANCH --head $HEAD_BRANCH \
-          -l "PR:$BASE_BRANCH<-$HEAD_BRANCH"
+          -l "PR:$BASE_BRANCH<-master"
