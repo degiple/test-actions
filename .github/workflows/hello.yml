@@ -23,4 +23,4 @@ jobs:
       - name: Dump
         run: echo '${{ toJSON(github) }}' | jq -r ".sha[0:7]"
       - name: Commit id
-        run: echo ${'${{ github.sha }}':0:7}
+        run: echo ${${{ github.sha }}:0:7}
