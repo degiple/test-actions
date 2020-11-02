@@ -6,7 +6,7 @@ name: Generate
 # events but only for the master branch
 on:
   push:
-    branches: [ master ]
+    branches: [master]
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
@@ -16,20 +16,20 @@ jobs:
       - uses: actions/checkout@v2.2.0
         with:
           fetch-depth: 0
-      - name: 'Get Previous tag'
+      - name: "Get Previous tag"
         id: previoustag
         uses: "WyriHaximus/github-action-get-previous-tag@master"
 
-      - name: 'Get next minor version'
+      - name: "Get next minor version"
         id: semvers
         uses: "WyriHaximus/github-action-next-semvers@master"
         with:
           version: ${{ steps.previoustag.outputs.tag }}
-          
-      - name: 'Create new milestone'
+
+      - name: "Create new milestone"
         id: createmilestone
         uses: "WyriHaximus/github-action-create-milestone@master"
         with:
-          title: ${{ steps.semvers.outputs.patch }}
+          title: v${{ steps.semvers.outputs.patch }}
         env:
           GITHUB_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
