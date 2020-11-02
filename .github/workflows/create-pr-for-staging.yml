@@ -16,7 +16,7 @@ jobs:
 
       - name: Create Pull Request
         env:
-          GITHUB_USER: ${{ secrets.GITHUB_USER }}
+          GITHUB_USER: ${{ q }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           BASE_BRANCH: staging
           HEAD_BRANCH: master
