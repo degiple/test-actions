@@ -36,4 +36,4 @@ jobs:
           NEXT_TAG: ${{ steps.next.outputs.tag }}
         run: |
           git tag $NEXT_TAG
-          git push --tag
+          git push --tags
