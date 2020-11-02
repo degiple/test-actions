@@ -20,7 +20,7 @@ jobs:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v2
 
-      # Runs a set of commands using the runners shell
-      - name: dump github context
-        run: |
-          echo ${{ toJSON(github) }}
+      - name: define hash
+        run: echo ::set-env name=SHORTHASH::$(echo '${{ toJSON(github) }}' | jq -r ".sha[0:7]")
+      - name: Test
+        run: echo $SHORTHASH
