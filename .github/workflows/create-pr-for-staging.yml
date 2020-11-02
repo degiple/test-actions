@@ -16,11 +16,13 @@ jobs:
 
       - name: Create Pull Request
         env:
+          GITHUB_USER: ${{ q }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           BASE_BRANCH: staging
           HEAD_BRANCH: master
           COMMIT_ID: ${{ github.sha }}
         run: |
+          echo $GITHUB_USER
           hub pull-request -m "Automatic PR ($BASE_BRANCH <- $HEAD_BRANCH) #${COMMIT_ID:0:7}" \
           --base $BASE_BRANCH --head $HEAD_BRANCH \
           -l "PR:$BASE_BRANCH<-$HEAD_BRANCH"
