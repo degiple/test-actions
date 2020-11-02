@@ -17,11 +17,11 @@ jobs:
       - name: Create tmp Branch
         id: create_branch
         env:
-          TZ: 'Asia/Tokyo'
+          TZ: "Asia/Tokyo"
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           DATE=`date "+%y%m%d-%H%M%S"`
-          BRANCH_NAME="master-v$DATE"
+          BRANCH_NAME="master_v$DATE"
           git checkout -b "$BRANCH_NAME"
           git push origin "$BRANCH_NAME"
           echo ::set-output name=branch_name::$BRANCH_NAME
