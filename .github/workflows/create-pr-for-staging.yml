@@ -21,7 +21,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           DATE=`date "+%y%m%d-%H%M%S"`
-          BRANCH_NAME="master:v$DATE"
+          BRANCH_NAME="master-v$DATE"
           git checkout -b "$BRANCH_NAME"
           git push origin "$BRANCH_NAME"
           echo ::set-output name=branch_name::$BRANCH_NAME
