@@ -1,0 +1,35 @@
+server {
+  listen 80;
+  server_name localhost;
+
+  client_max_body_size 10M;
+
+  set $auth ${NGINX_BASIC_AUTHENTICATION};
+
+  #ELBのヘルスチェックの場合BASIC認証なし
+  if ($http_user_agent ~* '^ELB-HealthChecker\/.*$') {
+      set $auth off;
+  }
+
+  # フロントエンドアプリ用のルーティング
+  location ^~ /frontend {
+    alias /usr/share/nginx/html/;
+    index  index.html index.htm;
+  }
+
+  # 静的ファイルの要求をstaticにルーティング
+  location /static/ {
+    alias /home/ubuntu/apokaku_db/static/;
+  }
+
+  location / {
+    auth_basic $auth; 
+    auth_basic_user_file /etc/nginx/.htpasswd;
+
+    proxy_pass http://${NGINX_PORXY_PASS_HOST}:8000;
+    proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+    proxy_set_header Host $http_host;
+    proxy_redirect off;
+  }
+
+}
