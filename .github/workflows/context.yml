@@ -8,7 +8,8 @@ on:
   push:
     branches: [master, staging]
   create:
-    tags: "v*"
+    tags:
+      - v*
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:

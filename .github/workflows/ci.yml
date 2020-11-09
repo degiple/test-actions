@@ -6,7 +6,8 @@ name: CI
 # events but only for the master branch
 on:
   create:
-    tags: "v*"
+    tags:
+      - v*
 
 env:
   WEB_IMAGE_NAME: myweb
