@@ -106,7 +106,7 @@ jobs:
 
   create_pr_to_staging:
     needs: [web_build, app_build]
-    steps:
+    step:
       - uses: actions/checkout@v2
       - name: "Get next tag"
         id: next
