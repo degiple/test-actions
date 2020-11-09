@@ -108,6 +108,7 @@ jobs:
 
   create_pr_to_staging:
     needs: [web_build, app_build]
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
       - name: "Get next tag"
