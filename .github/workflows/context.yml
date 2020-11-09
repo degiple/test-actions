@@ -7,6 +7,7 @@ name: GitHub Context
 on:
   push:
     branches: [master, staging]
+  create:
     tags: "v*"
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
@@ -26,6 +27,6 @@ jobs:
 
       - name: get
         run: |
-          message=${{ github.event.head_commit.message }}
+          message='${{ github.event.head_commit.message }}'
           list=(${message//_/ })
           echo ${list[-1]}
