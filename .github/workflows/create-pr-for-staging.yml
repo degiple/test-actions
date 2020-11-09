@@ -1,31 +1,136 @@
-name: Create Pull Request (staging <- master)
+# This is a basic workflow to help you get started with Actions
 
+name: version up
+
+# Controls when the action will run. Triggers the workflow on push or pull request
+# events but only for the master branch
 on:
   push:
-    branches:
-      - master
+    branches: [master]
 
+env:
+  WEB_IMAGE_NAME: myweb
+  APP_IMAGE_NAME: myapp
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
-  createPullRequest:
+  tag_version_up:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2.2.0
+      - name: "Get latest tag"
+        id: latest
+        run: |
+          git fetch --prune --unshallow --tags
+          TAG=$(git describe --tags $(git rev-list --tags --max-count=1))
+          echo ::set-output name=tag::$TAG
+      - name: "Create next tag"
+        id: next
+        env:
+          TAG: ${{ steps.latest.outputs.tag }}
+        run: |
+          version=$(echo ${TAG#*v})
+          list=(${version//./ })
+          major=$(echo ${list[0]}) && minor=$(echo ${list[1]}) && patch=0
+          next_minor=$((minor+1))
+          echo ::set-output name=tag::$(echo "v${major}.${next_minor}.${patch}")
+      - name: "Push next tag"
+        env:
+          NEXT_TAG: ${{ steps.next.outputs.tag }}
+        run: |
+          git tag $NEXT_TAG
+          git push --tags
+      #     echo $NEXT_TAG > tag_version.txt
+      # - name: Upload tag version as Atifact
+      #   uses: actions/upload-artifact@v2
+      #   with:
+      #     name: tag_version
+      #     path: tag_version.txt
+
+  web_build:
+    needs: tag_version_up
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2.2.0
+      - name: "Get next tag"
+        id: next
+        run: |
+          git fetch --prune --unshallow --tags
+          TAG=$(git describe --tags $(git rev-list --tags --max-count=1))
+          echo ::set-output name=tag::$TAG
+      - name: Log into GitHub Container Registry
+        run: |
+          echo "${{ secrets.CR_PAT }}" | docker login https://ghcr.io -u ${{ github.actor }} --password-stdin
+      - name: Build image
+        run: |
+          docker build ./ --file ./web/Dockerfile --tag $WEB_IMAGE_NAME
+      - name: Push image:myweb to GitHub Container Registry
+        env:
+          NEXT_TAG: ${{ steps.next.outputs.tag }}
+        run: |
+          IMAGE_ID=ghcr.io/${{ github.repository }}/$WEB_IMAGE_NAME
+          # Change all uppercase to lowercase
+          IMAGE_ID=$(echo $IMAGE_ID | tr '[A-Z]' '[a-z]')
+          VERSION=$NEXT_TAG
+          echo IMAGE_ID=$IMAGE_ID
+          echo VERSION=$VERSION
+          docker tag $WEB_IMAGE_NAME $IMAGE_ID:$VERSION
+          docker push $IMAGE_ID:$VERSION
+
+  app_build:
+    needs: tag_version_up
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2.2.0
+      - name: "Get next tag"
+        id: next
+        run: |
+          git fetch --prune --unshallow --tags
+          TAG=$(git describe --tags $(git rev-list --tags --max-count=1))
+          echo ::set-output name=tag::$TAG
+      - name: Log into GitHub Container Registry
+        run: |
+          echo "${{ secrets.CR_PAT }}" | docker login https://ghcr.io -u ${{ github.actor }} --password-stdin
+      - name: Build image
+        run: |
+          docker build ./myapp --tag $APP_IMAGE_NAME
+      - name: Push image:myapp to GitHub Container Registry
+        env:
+          NEXT_TAG: ${{ steps.next.outputs.tag }}
+        run: |
+          IMAGE_ID=ghcr.io/${{ github.repository }}/$APP_IMAGE_NAME
+          IMAGE_ID=$(echo $IMAGE_ID | tr '[A-Z]' '[a-z]')
+          VERSION=$NEXT_TAG
+          echo IMAGE_ID=$IMAGE_ID
+          echo VERSION=$VERSION
+          docker tag $APP_IMAGE_NAME $IMAGE_ID:$VERSION
+          docker push $IMAGE_ID:$VERSION
+
+  create_pr_to_staging:
+    needs: [web_build, app_build]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-
+      - name: "Get next tag"
+        id: next
+        run: |
+          git fetch --prune --unshallow --tags
+          TAG=$(git describe --tags $(git rev-list --tags --max-count=1))
+          echo ::set-output name=tag::$TAG
       - name: Install hub
         uses: geertvdc/setup-hub@v1.0.0
-
       - name: Create tmp Branch
         id: create_branch
         env:
-          TZ: 'Asia/Tokyo'
+          TZ: "Asia/Tokyo"
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          NEXT_TAG: ${{ steps.next.outputs.tag }}
         run: |
           DATE=`date "+%y%m%d-%H%M%S"`
-          BRANCH_NAME="master-v$DATE"
+          BRANCH_NAME="master_${NEXT_TAG}"
           git checkout -b "$BRANCH_NAME"
           git push origin "$BRANCH_NAME"
           echo ::set-output name=branch_name::$BRANCH_NAME
-
       - name: Create Pull Request
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
