@@ -61,30 +61,29 @@ jobs:
       - name: Log into GitHub Container Registry
         run: |
           echo "${{ secrets.CR_PAT }}" | docker login https://ghcr.io -u ${{ github.actor }} --password-stdin
-      - name: Build image
+      - name: Build & Push image to GCR 
         env:
           DOCKER_BUILDKIT: 1
-        run: |
-          docker build ./ --file ./web/Dockerfile --tag $WEB_IMAGE_NAME
-      - name: Push image:myweb to GitHub Container Registry
-        env:
           NEXT_TAG: ${{ steps.next.outputs.tag }}
         run: |
           IMAGE_ID=ghcr.io/${{ github.repository }}/$WEB_IMAGE_NAME
-          # Change all uppercase to lowercase
           IMAGE_ID=$(echo $IMAGE_ID | tr '[A-Z]' '[a-z]')
-          VERSION=$NEXT_TAG
-          echo IMAGE_ID=$IMAGE_ID
-          echo VERSION=$VERSION
-          docker tag $WEB_IMAGE_NAME $IMAGE_ID:$VERSION
-          docker push $IMAGE_ID:$VERSION
+          docker build \
+            --cache-from=$IMAGE_ID:latest \
+            --build-arg BUILDKIT_INLINE_CACHE=1 \
+            --tag $IMAGE_ID:$NEXT_TAG \
+            --tag $IMAGE_ID:latest \
+            ./myapp
+          docker push $IMAGE_ID:$NEXT_TAG
+          docker push $IMAGE_ID:latest
+          echo VERSION=$NEXT_TAG
 
   app_build:
     needs: tag_version_up
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2.2.0
-      - name: "Get next tag"
+      - name: Get next tag
         id: next
         run: |
           git fetch --prune --unshallow --tags
@@ -93,22 +92,22 @@ jobs:
       - name: Log into GitHub Container Registry
         run: |
           echo "${{ secrets.CR_PAT }}" | docker login https://ghcr.io -u ${{ github.actor }} --password-stdin
-      - name: Build image
+      - name: Build & Push image to GCR 
         env:
           DOCKER_BUILDKIT: 1
-        run: |
-          docker build ./myapp --tag $APP_IMAGE_NAME
-      - name: Push image:myapp to GitHub Container Registry
-        env:
           NEXT_TAG: ${{ steps.next.outputs.tag }}
         run: |
           IMAGE_ID=ghcr.io/${{ github.repository }}/$APP_IMAGE_NAME
           IMAGE_ID=$(echo $IMAGE_ID | tr '[A-Z]' '[a-z]')
-          VERSION=$NEXT_TAG
-          echo IMAGE_ID=$IMAGE_ID
-          echo VERSION=$VERSION
-          docker tag $APP_IMAGE_NAME $IMAGE_ID:$VERSION
-          docker push $IMAGE_ID:$VERSION
+          docker build \
+            --cache-from=$IMAGE_ID:latest \
+            --build-arg BUILDKIT_INLINE_CACHE=1 \
+            --tag $IMAGE_ID:$NEXT_TAG \
+            --tag $IMAGE_ID:latest \
+            ./myapp
+          docker push $IMAGE_ID:$NEXT_TAG
+          docker push $IMAGE_ID:latest
+          echo VERSION=$NEXT_TAG
 
   create_pr_to_staging:
     needs: [web_build, app_build]
