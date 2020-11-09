@@ -22,3 +22,9 @@ jobs:
 
       - name: GitHub Context Dump
         run: echo '${{ toJSON(github) }}' | jq -r ".sha[0:7]"
+
+      - name: get
+        run: |
+          message=${{ githb.event.message }}
+          list=(${message//_/ })
+          echo ${list[-1]}
