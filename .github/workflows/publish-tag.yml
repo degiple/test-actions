@@ -5,10 +5,10 @@ name: version up
 # Controls when the action will run. Triggers the workflow on push or pull request
 # events but only for the master branch
 on:
-  # push:
-  #   branches: [master]
-  create:
-    tags: "v*"
+  push:
+    branches: [master]
+  # create:
+  #   tags: "v*"
 
 # env:
 #   WEB_IMAGE_NAME: myweb
