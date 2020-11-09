@@ -1,12 +1,13 @@
 # This is a basic workflow to help you get started with Actions
 
-name: version up
+name: CI
 
 # Controls when the action will run. Triggers the workflow on push or pull request
 # events but only for the master branch
 on:
   push:
-    branches: [master]
+    tags:
+      - v*
 
 env:
   WEB_IMAGE_NAME: myweb
@@ -61,7 +62,7 @@ jobs:
       - name: Log into GitHub Container Registry
         run: |
           echo "${{ secrets.CR_PAT }}" | docker login https://ghcr.io -u ${{ github.actor }} --password-stdin
-      - name: Build & Push image to GCR 
+      - name: Build & Push image to GCR
         env:
           DOCKER_BUILDKIT: 1
           NEXT_TAG: ${{ steps.next.outputs.tag }}
@@ -92,7 +93,7 @@ jobs:
       - name: Log into GitHub Container Registry
         run: |
           echo "${{ secrets.CR_PAT }}" | docker login https://ghcr.io -u ${{ github.actor }} --password-stdin
-      - name: Build & Push image to GCR 
+      - name: Build & Push image to GCR
         env:
           DOCKER_BUILDKIT: 1
           NEXT_TAG: ${{ steps.next.outputs.tag }}
