@@ -50,7 +50,7 @@ jobs:
   web_build:
     needs: tag_version_up
     runs-on: ubuntu-latest
-    step:
+    steps:
       - uses: actions/checkout@v2.2.0
       - name: "Get next tag"
         id: next
@@ -80,7 +80,7 @@ jobs:
   app_build:
     needs: tag_version_up
     runs-on: ubuntu-latest
-    step:
+    steps:
       - uses: actions/checkout@v2.2.0
       - name: "Get next tag"
         id: next
@@ -108,7 +108,7 @@ jobs:
 
   create_pr_to_staging:
     needs: [web_build, app_build]
-    step:
+    steps:
       - uses: actions/checkout@v2
       - name: "Get next tag"
         id: next
