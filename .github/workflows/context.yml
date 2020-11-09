@@ -25,6 +25,6 @@ jobs:
 
       - name: get
         run: |
-          message=${{ githb.event.message }}
+          message=${{ github.event.message }}
           list=(${message//_/ })
           echo ${list[-1]}
