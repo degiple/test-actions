@@ -1,19 +1,13 @@
-# This is a basic workflow to help you get started with Actions
+name: CI for Staging
 
-name: CI
-
-# Controls when the action will run. Triggers the workflow on push or pull request
-# events but only for the master branch
 on:
   push:
-    tags:
-      - v*
+    branches: [master]
 
 env:
   WEB_IMAGE_NAME: myweb
   APP_IMAGE_NAME: myapp
 
-# A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
   tag_version_up:
     runs-on: ubuntu-latest
@@ -41,12 +35,6 @@ jobs:
         run: |
           git tag $NEXT_TAG
           git push --tags
-      #     echo $NEXT_TAG > tag_version.txt
-      # - name: Upload tag version as Atifact
-      #   uses: actions/upload-artifact@v2
-      #   with:
-      #     name: tag_version
-      #     path: tag_version.txt
 
   web_build:
     needs: tag_version_up
