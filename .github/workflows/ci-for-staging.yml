@@ -129,6 +129,6 @@ jobs:
           BASE_BRANCH: staging
           HEAD_BRANCH: ${{ steps.create_branch.outputs.branch_name }}
         run: |
-          hub pull-request -m "Automatic PR $BASE_BRANCH <- $HEAD_BRANCH" \
+          hub pull-request -m "【Automatic PR】 $BASE_BRANCH <- $HEAD_BRANCH" \
           --base $BASE_BRANCH --head $HEAD_BRANCH \
           -l "PR:$BASE_BRANCH<-master"
