@@ -62,7 +62,7 @@ jobs:
             --build-arg BUILDKIT_INLINE_CACHE=1 \
             --tag $IMAGE_ID:$NEXT_TAG \
             --tag $IMAGE_ID:latest \
-            -f ./myweb/Dockerfile
+            -f ./myweb/Dockerfile \
             ./
           docker push $IMAGE_ID:$NEXT_TAG
           docker push $IMAGE_ID:latest
