@@ -101,6 +101,7 @@ jobs:
     needs: [push_web, push_app]
     name: Deploy ECS
     runs-on: ubuntu-latest
+      - uses: actions/checkout@v2
       - name: Get tag version
         id: tag_version
         run: |
