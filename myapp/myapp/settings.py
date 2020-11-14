@@ -28,7 +28,8 @@ DEBUG = True
 ALLOWED_HOSTS = [
     "localhost",
     "apokaku-daniel.com",
-    "stg.apokaku-daniel.com" "stg2.apokaku-daniel.com",
+    "stg.apokaku-daniel.com",
+    "stg2.apokaku-daniel.com",
 ]
 
 
