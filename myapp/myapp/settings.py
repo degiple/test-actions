@@ -25,7 +25,11 @@ SECRET_KEY = "xoq9-qxcqyouq9m(lglv^r7_)&x)l0lb=4c)y9&bk351npmr(-"
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ["localhost", "apokaku-daniel.com", "*.apokaku-daniel.com"]
+ALLOWED_HOSTS = [
+    "localhost",
+    "apokaku-daniel.com",
+    "stg.apokaku-daniel.com" "stg2.apokaku-daniel.com",
+]
 
 
 # Application definition
