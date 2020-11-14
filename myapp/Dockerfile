@@ -1,7 +1,9 @@
 FROM python:3.6.8-alpine
 
+ARG APP_HOME=/myapp
+
 ENV PYTHONUNBUFFERED 1
-ENV APP_HOME /myapp
+
 
 # bash, psycopg2のインストール
 RUN apk update \
@@ -16,3 +18,6 @@ RUN python -m pip install --upgrade pip && \
     python -m pip install -r requirements.txt
 
 COPY ./ ${APP_HOME}
+
+ENTRYPOINT [ "./entrypoint.sh" ]
+CMD ["gunicorn", "--bind", "0.0.0.0:8000", "--log-level", "warning", "myapp.wsgi:application"]

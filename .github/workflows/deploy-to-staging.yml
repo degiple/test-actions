@@ -4,6 +4,10 @@ on:
   push:
     branches: [staging]
 
+env:
+  WEB_IMAGE_NAME: myweb
+  APP_IMAGE_NAME: myapp
+
 jobs:
   deploy:
     name: Push and Deploy
@@ -11,7 +15,21 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - name: Get tag version
+        id: tag_version
         run: |
           message='${{ github.event.head_commit.message }}'
           list=(${message//_/ })
           echo ::set-output name=tag::${list[-1]}
+      - name: Log into GitHub Container Registry
+        run: |
+          echo "${{ secrets.CR_PAT }}" | docker login https://ghcr.io -u ${{ github.actor }} --password-stdin
+      - name: Pull image of the tag from GCR
+        env:
+          DOCKER_BUILDKIT: 1
+          TAG: ${{ steps.tag_version.outputs.tag }}
+        run: |
+          IMAGE_ID=ghcr.io/${{ github.repository }}/$WEB_IMAGE_NAME
+          IMAGE_ID=$(echo $IMAGE_ID | tr '[A-Z]' '[a-z]')
+          docker pull $IMAGE_ID:$TAG
+          echo VERSION=$NEXT_TAG
+      - name: Push the image to ECR
