@@ -9,6 +9,7 @@ env:
   WEB_ECR_REPOSITORY: apokaku-daniel-web
   APP_GCR_REPOSITORY: myapp
   APP_ECR_REPOSITORY: apokaku-daniel-app
+  ECS_TASK_DEFINITION_FAMILY: apokaku-daniel-web-app
   ECS_SERVICE: apokaku-daniel-web-app-albService259B0016-eEzvjnfvd0qR
   ECS_CLUSTER: apokaku-daniel-web-app-cluster611F8AFF-cxgAdmZFJFtK
 
@@ -127,11 +128,17 @@ jobs:
       - name: Login to Amazon ECR
         id: login-ecr
         uses: aws-actions/amazon-ecr-login@v1
+      - name: Download task definition
+        run: |
+          aws ecs describe-task-definition \
+          --task-definition $ECS_TASK_DEFINITION_FAMILY \
+          --query taskDefinition \
+          > task-definition.json
       - name: Render Amazon ECS task definition for web container
         id: render-web-container
         uses: aws-actions/amazon-ecs-render-task-definition@v1
         with:
-          task-definition: task-definition-stg.json
+          task-definition: task-definition.json
           container-name: ${{ steps.args.outputs.web }}
           image: ${{ steps.login-ecr.outputs.registry }}/${{ steps.args.outputs.web }}:${{ steps.tag_version.outputs.tag }}
       - name: Modify Amazon ECS task definition with app container
