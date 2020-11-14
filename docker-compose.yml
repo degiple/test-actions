@@ -4,7 +4,7 @@ services:
     container_name: myweb
     build:
       context: ./
-      dockerfile: ./web/Dockerfile
+      dockerfile: ./myweb/Dockerfile
       args:
         NODE_TAG: "12.8"
         NGINX_TAG: "alpine"
@@ -20,18 +20,15 @@ services:
     container_name: myapp
     build:
       context: ./myapp
-      # dockerfile: ./myapp/Dockerfile
-    environment:
-      APP_HOME: /myapp
+      args:
+        APP_HOME: /myapp
+    # environment:
     tty: true
     expose:
       - 8000
-    volumes:
-      - ./myapp:/myapp
     # env_file: .env
     # depends_on:
     #   - db
     #   - dynamodb
-    command: >
-      /bin/sh -c "python manage.py migrate &&
-                  gunicorn myapp.wsgi:application --bind 0.0.0.0:8000 --reload --log-level debug"
+    # command: >
+    #   /bin/sh -c "gunicorn myapp.wsgi:application --bind 0.0.0.0:8000 --reload --log-level debug"
