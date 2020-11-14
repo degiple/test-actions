@@ -1,7 +1,14 @@
 version: "3.4"
 services:
   web:
-    image: 
+    container_name: myweb
+    build:
+      context: ./
+      dockerfile: ./myweb/Dockerfile
+      # args:
+      #   NODE_TAG: "12.8"
+      #   NGINX_TAG: "alpine"
+      #   APP_HOME: "/home/ubuntu/apokaku_db/frontend/"
     environment:
       NGINX_BASIC_AUTHENTICATION: "off"
       NGINX_PORXY_PASS_HOST: "app"
