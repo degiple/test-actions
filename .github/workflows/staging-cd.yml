@@ -10,8 +10,8 @@ env:
   APP_GCR_REPOSITORY: myapp
   APP_ECR_REPOSITORY: apokaku-daniel-app
   ECS_TASK_DEFINITION_FAMILY: apokaku-daniel-web-app
-  ECS_SERVICE: apokaku-daniel-web-app-albService259B0016-eEzvjnfvd0qR
-  ECS_CLUSTER: apokaku-daniel-web-app-cluster611F8AFF-cxgAdmZFJFtK
+  ECS_SERVICE: apokaku-daniel-web-app-albService259B0016-rnTLDmFEzEcj
+  ECS_CLUSTER: apokaku-daniel-web-app-cluster611F8AFF-ESE2Gn1zFCNs
 
 jobs:
   push_web:
