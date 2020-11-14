@@ -32,4 +32,4 @@ jobs:
           IMAGE_ID=$(echo $IMAGE_ID | tr '[A-Z]' '[a-z]')
           docker pull $IMAGE_ID:$TAG
           echo VERSION=$NEXT_TAG
-      - name: Push the image to ECR
+      # - name: Push the image to ECR
