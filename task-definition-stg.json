@@ -1,6 +1,6 @@
 {
   "ipcMode": null,
-  "executionRoleArn": "arn:aws:iam::312948254402:role/apokaku-daniel-web-app-apokakudanielwebappExecutio-QRGPJPEJG5LK",
+  "executionRoleArn": "arn:aws:iam::312948254402:role/apokaku-daniel-web-app-apokakudanielwebappExecutio-1VQM6GCJESVEA",
   "containerDefinitions": [
     {
       "dnsSearchDomains": [],
@@ -113,7 +113,7 @@
   ],
   "placementConstraints": [],
   "memory": "1024",
-  "taskRoleArn": "arn:aws:iam::312948254402:role/apokaku-daniel-web-app-apokakudanielwebappTaskRole-MI8HNCAFZ8OS",
+  "taskRoleArn": "arn:aws:iam::312948254402:role/apokaku-daniel-web-app-apokakudanielwebappTaskRole-6B28A8OFR3LM",
   "family": "apokaku-daniel-web-app",
   "pidMode": null,
   "requiresCompatibilities": ["FARGATE"],
