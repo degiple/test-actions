@@ -139,7 +139,7 @@ jobs:
         with:
           task-definition: task-definition.json
           container-name: web
-          image: ${{ steps.login-ecr.outputs.registry }}/${{ steps.args.outputs.web }}:latest
+          image: ${{ steps.login-ecr.outputs.registry }}/${{ steps.args.outputs.web }}:v0.35.0
       - name: Confirm task definition 1
         env:
           TD_RENDERED_WEB: ${{ steps.render-web-container.outputs.task-definition }}
@@ -151,7 +151,7 @@ jobs:
         with:
           task-definition: ${{ steps.render-web-container.outputs.task-definition }}
           container-name: app
-          image: ${{ steps.login-ecr.outputs.registry }}/${{ steps.args.outputs.app }}:latest
+          image: ${{ steps.login-ecr.outputs.registry }}/${{ steps.args.outputs.app }}:v0.35.0
       - name: Confirm task definition 2
         env:
           TD_RENDERED_APP: ${{ steps.render-app-container.outputs.task-definition }}
