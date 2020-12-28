@@ -157,13 +157,13 @@ jobs:
           TD_RENDERED_APP: ${{ steps.render-app-container.outputs.task-definition }}
         run: |
           cat $TD_RENDERED_APP
-      # - name: Deploy Amazon ECS task definition
-      #   uses: aws-actions/amazon-ecs-deploy-task-definition@v1
-      #   with:
-      #     task-definition: ${{ steps.render-app-container.outputs.task-definition }}
-      #     service: ${{ steps.args.outputs.service }}
-      #     cluster: ${{ steps.args.outputs.cluster }}
-      #     wait-for-service-stability: true
-      # codedeploy-appspec: appspec.json
-      # codedeploy-application: AppECS-apokaku-daniel-cluster-apokaku-daniel-service
-      # codedeploy-deployment-group: DgpECS-apokaku-daniel-cluster-apokaku-daniel-service
+      - name: Deploy Amazon ECS task definition
+        uses: aws-actions/amazon-ecs-deploy-task-definition@v1
+        with:
+          task-definition: ${{ steps.render-app-container.outputs.task-definition }}
+          service: ${{ steps.args.outputs.service }}
+          cluster: ${{ steps.args.outputs.cluster }}
+#           wait-for-service-stability: true
+#       codedeploy-appspec: appspec.json
+#       codedeploy-application: AppECS-apokaku-daniel-cluster-apokaku-daniel-service
+#       codedeploy-deployment-group: DgpECS-apokaku-daniel-cluster-apokaku-daniel-service
