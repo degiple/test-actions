@@ -144,7 +144,7 @@ jobs:
         env:
           TD_RENDERED_WEB: ${{ steps.render-web-container.outputs.task-definition }}
         run: |
-          echo $TD_RENDERED_WEB
+          cat $TD_RENDERED_WEB
       - name: Modify Amazon ECS task definition with app container
         id: render-app-container
         uses: aws-actions/amazon-ecs-render-task-definition@v1
@@ -156,7 +156,7 @@ jobs:
         env:
           TD_RENDERED_APP: ${{ steps.render-app-container.outputs.task-definition }}
         run: |
-          echo $TD_RENDERED_APP
+          cat $TD_RENDERED_APP
       # - name: Deploy Amazon ECS task definition
       #   uses: aws-actions/amazon-ecs-deploy-task-definition@v1
       #   with:
