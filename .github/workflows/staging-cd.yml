@@ -6,9 +6,9 @@ on:
 
 env:
   WEB_GCR_REPOSITORY: myweb
-  WEB_ECR_REPOSITORY: apokaku-daniel-web
+  WEB_ECR_REPOSITORY: apokaku/web
   APP_GCR_REPOSITORY: myapp
-  APP_ECR_REPOSITORY: apokaku-daniel-app
+  APP_ECR_REPOSITORY: apokaku/app
   ECS_TASK_DEFINITION_FAMILY: apokaku-daniel-web-app
   ECS_SERVICE: apokaku-daniel-service
   ECS_CLUSTER: apokaku-daniel-cluster
@@ -57,48 +57,48 @@ jobs:
   #         docker push $ECR_REGISTRY/$WEB_ECR_REPOSITORY:latest
   #         docker push $ECR_REGISTRY/$WEB_ECR_REPOSITORY:$TAG
   # push_app:
-    name: Push app to ECR
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-      - name: Get tag version
-        id: tag_version
-        run: |
-          message='${{ github.event.head_commit.message }}'
-          list=(${message//_/ })
-          echo ::set-output name=tag::${list[-1]}
-      - name: Log into GitHub Container Registry
-        run: |
-          echo "${{ secrets.CR_PAT }}" | docker login https://ghcr.io -u ${{ github.actor }} --password-stdin
-      - name: Pull image of the tag from GCR
-        id: gcr
-        env:
-          DOCKER_BUILDKIT: 1
-          TAG: ${{ steps.tag_version.outputs.tag }}
-        run: |
-          IMAGE_ID=ghcr.io/${{ github.repository }}/$APP_GCR_REPOSITORY
-          IMAGE_ID=$(echo $IMAGE_ID | tr '[A-Z]' '[a-z]')
-          docker pull $IMAGE_ID:$TAG
-          echo ::set-output name=image_id::${IMAGE_ID}
-      - name: Configure AWS credentials
-        uses: aws-actions/configure-aws-credentials@v1
-        with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: ap-northeast-1
-      - name: Login to Amazon ECR
-        id: login-ecr
-        uses: aws-actions/amazon-ecr-login@v1
-      - name: push image to Amazon ECR
-        env:
-          GCR_IMAGE_ID: ${{ steps.gcr.outputs.image_id }}
-          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
-          TAG: ${{ steps.tag_version.outputs.tag }}
-        run: |
-          docker tag $GCR_IMAGE_ID:$TAG $ECR_REGISTRY/$APP_ECR_REPOSITORY:latest
-          docker tag $GCR_IMAGE_ID:$TAG $ECR_REGISTRY/$APP_ECR_REPOSITORY:$TAG
-          docker push $ECR_REGISTRY/$APP_ECR_REPOSITORY:latest
-          docker push $ECR_REGISTRY/$APP_ECR_REPOSITORY:$TAG
+#     name: Push app to ECR
+#     runs-on: ubuntu-latest
+#     steps:
+#       - uses: actions/checkout@v2
+#       - name: Get tag version
+#         id: tag_version
+#         run: |
+#           message='${{ github.event.head_commit.message }}'
+#           list=(${message//_/ })
+#           echo ::set-output name=tag::${list[-1]}
+#       - name: Log into GitHub Container Registry
+#         run: |
+#           echo "${{ secrets.CR_PAT }}" | docker login https://ghcr.io -u ${{ github.actor }} --password-stdin
+#       - name: Pull image of the tag from GCR
+#         id: gcr
+#         env:
+#           DOCKER_BUILDKIT: 1
+#           TAG: ${{ steps.tag_version.outputs.tag }}
+#         run: |
+#           IMAGE_ID=ghcr.io/${{ github.repository }}/$APP_GCR_REPOSITORY
+#           IMAGE_ID=$(echo $IMAGE_ID | tr '[A-Z]' '[a-z]')
+#           docker pull $IMAGE_ID:$TAG
+#           echo ::set-output name=image_id::${IMAGE_ID}
+#       - name: Configure AWS credentials
+#         uses: aws-actions/configure-aws-credentials@v1
+#         with:
+#           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+#           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+#           aws-region: ap-northeast-1
+#       - name: Login to Amazon ECR
+#         id: login-ecr
+#         uses: aws-actions/amazon-ecr-login@v1
+#       - name: push image to Amazon ECR
+#         env:
+#           GCR_IMAGE_ID: ${{ steps.gcr.outputs.image_id }}
+#           ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+#           TAG: ${{ steps.tag_version.outputs.tag }}
+#         run: |
+#           docker tag $GCR_IMAGE_ID:$TAG $ECR_REGISTRY/$APP_ECR_REPOSITORY:latest
+#           docker tag $GCR_IMAGE_ID:$TAG $ECR_REGISTRY/$APP_ECR_REPOSITORY:$TAG
+#           docker push $ECR_REGISTRY/$APP_ECR_REPOSITORY:latest
+#           docker push $ECR_REGISTRY/$APP_ECR_REPOSITORY:$TAG
   deploy:
     # needs: [push_web, push_app]
     name: Deploy ECS
