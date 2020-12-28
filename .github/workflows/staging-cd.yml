@@ -138,8 +138,8 @@ jobs:
         uses: aws-actions/amazon-ecs-render-task-definition@v1
         with:
           task-definition: task-definition.json
-          container-name: ${{ steps.args.outputs.web }}
-          image: ${{ steps.login-ecr.outputs.registry }}/${{ steps.args.outputs.web }}:${{ steps.tag_version.outputs.tag }}
+          container-name: web
+          image: ${{ steps.login-ecr.outputs.registry }}/${{ steps.args.outputs.web }}:latest
       - name: Confirm task definition 1
         env:
           TD_RENDERED_WEB: ${{ steps.render-web-container.outputs.task-definition }}
@@ -150,8 +150,8 @@ jobs:
         uses: aws-actions/amazon-ecs-render-task-definition@v1
         with:
           task-definition: ${{ steps.render-web-container.outputs.task-definition }}
-          container-name: ${{ steps.args.outputs.app }}
-          image: ${{ steps.login-ecr.outputs.registry }}/${{ steps.args.outputs.app }}:${{ steps.tag_version.outputs.tag }}
+          container-name: app
+          image: ${{ steps.login-ecr.outputs.registry }}/${{ steps.args.outputs.app }}:latest
       - name: Confirm task definition 2
         env:
           TD_RENDERED_APP: ${{ steps.render-app-container.outputs.task-definition }}
