@@ -163,7 +163,7 @@ jobs:
           task-definition: ${{ steps.render-app-container.outputs.task-definition }}
           service: ${{ steps.args.outputs.service }}
           cluster: ${{ steps.args.outputs.cluster }}
-#           wait-for-service-stability: true
+          wait-for-service-stability: true
 #       codedeploy-appspec: appspec.json
 #       codedeploy-application: AppECS-apokaku-daniel-cluster-apokaku-daniel-service
 #       codedeploy-deployment-group: DgpECS-apokaku-daniel-cluster-apokaku-daniel-service
