@@ -19,7 +19,7 @@ jobs:
           git fetch --prune --unshallow --tags
           TAG=$(git describe --tags $(git rev-list --tags --max-count=1))
           echo ::set-output name=tag::$TAG
-      - name: "Create next tag"
+      - name: "Create & Push next tag"
         id: next
         env:
           TAG: ${{ steps.latest.outputs.tag }}
@@ -28,12 +28,7 @@ jobs:
           list=(${version//./ })
           major=$(echo ${list[0]}) && minor=$(echo ${list[1]}) && patch=0
           next_minor=$((minor+1))
-          echo ::set-output name=tag::$(echo "v${major}.${next_minor}.${patch}")
-      - name: "Push next tag"
-        env:
-          NEXT_TAG: ${{ steps.next.outputs.tag }}
-        run: |
-          git tag $NEXT_TAG
+          git tag $(echo "v${major}.${next_minor}.${patch}")
           git push --tags
 
   web_build:
@@ -110,8 +105,6 @@ jobs:
           git fetch --prune --unshallow --tags
           TAG=$(git describe --tags $(git rev-list --tags --max-count=1))
           echo ::set-output name=tag::$TAG
-      # - name: Install hub
-      #   uses: geertvdc/setup-hub@v1.0.0
       - name: Create tmp Branch
         id: create_branch
         env:
